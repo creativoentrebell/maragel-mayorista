@@ -15,10 +15,13 @@
       --bg:       #FFFFFF;
       --card-bg:  #F7F7F7;
       --border:   #E9E9E9;
+      --bar-h:    84px;   /* alto real de la barra sticky (lo calcula el JS) */
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
+      /* 'clip' en vez de 'hidden': evita el scroll lateral sin romper position:sticky */
+      overflow-x: clip;
       font-family: 'Instrument Sans', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
@@ -29,8 +32,13 @@
     .search-wrap {
       position: sticky; top: 0; z-index: 95;
       background: var(--bg); border-bottom: 1px solid var(--border);
-      padding: 10px 28px; display: flex; flex-direction: column; gap: 8px;
+      padding: 10px 28px;
+      display: grid; grid-template-columns: 1fr auto;
+      column-gap: 10px; row-gap: 8px; align-items: center;
     }
+    .search-wrap > .search-controls { grid-column: 1; grid-row: 1; }
+    .search-wrap > .cart-btn        { grid-column: 2; grid-row: 1; justify-self: end; }
+    .search-wrap > .search-inner    { grid-column: 1 / -1; grid-row: 2; }
     /* Fila de controles */
     .search-controls {
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
@@ -111,7 +119,7 @@
 
     /* Banner modo Mayorista */
     .modo-banner {
-      display: none; position: sticky; top: 84px; z-index: 94;
+      display: none; position: sticky; top: var(--bar-h); z-index: 94;
       background: var(--text); color: #fff;
       padding: 7px 28px; text-align: center;
       font-size: 0.75rem; font-weight: 500; letter-spacing: 0.5px;
@@ -189,6 +197,7 @@
       background-clip: text;
       animation: shimmer 4s linear infinite;
     }
+    .bs-note-sp { display: none; }
     .bs-heading-note {
       font-size: 0.78rem; color: var(--text-sec); line-height: 1.5;
       max-width: 200px; text-align: right; padding-bottom: 4px;
@@ -246,7 +255,7 @@
 
     /* ── CATEGORY NAV ───────────────────────────── */
     .cat-nav-wrap {
-      position: sticky; top: 84px; z-index: 90;
+      position: sticky; top: var(--bar-h); z-index: 90;
       background: var(--bg); border-bottom: 1px solid var(--border);
     }
 
@@ -828,14 +837,91 @@
     @media (max-width: 580px) {
       .banner, .search-wrap, .products-main, .bs-section, footer { padding-left: 16px; padding-right: 16px; }
       .cat-nav { padding: 0 16px; }
-      .subcat-nav { padding: 10px 16px; }
-      .banner { flex-direction: column; gap: 20px; }
-      .banner-right { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
-      .banner-catalog-year { text-align: left; }
-      .sec-title { font-size: 2rem; }
-      .cat-section-name { font-size: 1.4rem; }
-      .bs-heading { flex-direction: column; gap: 12px; }
-      .bs-heading-note { text-align: left; }
+      .subcat-nav { padding: 8px 16px; }
+
+      /* ── BANNER COMPACTO ───────────────────── */
+      .banner {
+        flex-direction: column; gap: 16px;
+        padding-top: 30px; padding-bottom: 26px;
+      }
+      .banner-title { font-size: 1.5rem; letter-spacing: -0.3px; }
+      .banner-desc  { font-size: 0.72rem; line-height: 1.55; margin-top: 10px; max-width: 100%; }
+      .banner-right {
+        flex-direction: row; align-items: flex-end; justify-content: space-between;
+        width: 100%; margin-right: 0; gap: 12px;
+      }
+      .banner-logo { height: 46px; }
+      .banner-catalog-year { text-align: right; font-size: 0.65rem; }
+
+      /* ── BARRA DE CONTROLES: 2 FILAS ───────── */
+      .search-wrap { padding-top: 8px; padding-bottom: 8px; row-gap: 8px; column-gap: 8px; }
+      /* fila 1: buscador + carrito · fila 2: filtros */
+      .search-wrap > .search-inner    { grid-column: 1; grid-row: 1; }
+      .search-wrap > .cart-btn        { grid-column: 2; grid-row: 1; align-self: center; }
+      .search-wrap > .search-controls { grid-column: 1 / -1; grid-row: 2; }
+
+      .search-input { padding: 8px 32px 8px 12px; font-size: 0.8rem; }
+
+      .search-controls {
+        justify-content: flex-start; gap: 6px;
+        overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      }
+      .search-controls::-webkit-scrollbar { display: none; }
+      .search-controls-right { gap: 6px; margin-left: auto; padding-right: 2px; }
+
+      .mode-btn        { padding: 5px 7px;  font-size: 0.64rem; }
+      .btn-solo-nuevos { padding: 5px 8px;  font-size: 0.64rem; }
+      .lbl-solo        { display: none; }          /* "Solo Nuevos" -> "Nuevos" */
+      .toggle-label-text { font-size: 0.64rem; }
+      .toggle-wrap     { gap: 5px; }
+      .toggle-switch   { width: 27px; height: 15px; }
+      .toggle-switch::after { width: 11px; height: 11px; top: 2px; left: 2px; }
+      .toggle-switch.on::after { transform: translateX(12px); }
+      .cart-btn { width: 30px; height: 30px; }
+
+      .modo-banner { padding: 6px 16px; font-size: 0.7rem; }
+
+      /* ── BEST SELLERS COMPACTO ─────────────── */
+      .bs-section { padding-top: 30px; padding-bottom: 40px; }
+      .bs-heading { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 22px; }
+      .bs-heading-note { text-align: left; max-width: 100%; font-size: 0.74rem; padding-bottom: 0; }
+      /* "Los tonos favoritos de la temporada" en una sola línea */
+      .bs-note-br { display: none; }
+      .bs-note-sp { display: inline; }
+      .sec-eyebrow { font-size: 9px; letter-spacing: 2px; margin-bottom: 6px; }
+      .sec-title { font-size: 1.85rem; letter-spacing: -0.6px; }
+      .bs-grid { gap: 12px; }
+      .bs-visual { margin-bottom: 10px; border-radius: 8px; }
+      .bs-subcat { font-size: 9px; letter-spacing: 1.4px; margin-bottom: 3px; }
+      .bs-name { font-size: 0.8rem; line-height: 1.25; margin-bottom: 4px; }
+      .bs-price { font-size: 0.9rem; }
+      .bs-ref-ghost { font-size: 3.6rem; letter-spacing: -3px; bottom: 8px; right: 10px; }
+
+      /* ── SECCIONES DE PRODUCTO ─────────────── */
+      .products-main { padding-bottom: 60px; }
+      .cat-section { margin-top: 40px; }
+      .cat-section-head { padding-bottom: 12px; margin-bottom: 20px; gap: 12px; }
+      .cat-section-name { font-size: 1.35rem; }
+      .subcat-divider { margin: 24px 0 14px; }
+      .cat-tab { padding: 12px 14px; font-size: 0.78rem; }
+      .product-grid { gap: 10px; }
+      .pc-info { padding: 8px 10px 12px; }
+      .pc-name { font-size: 0.78rem; margin-bottom: 6px; }
+    }
+
+    /* Teléfonos angostos: apretamos la fila de filtros para que quepa entera */
+    @media (max-width: 400px) {
+      .search-controls { gap: 4px; }
+      .search-controls-right { gap: 4px; }
+      .mode-btn { padding: 5px 6px; font-size: 0.6rem; }
+      .mode-btn svg { width: 8px; height: 9px; margin-right: 2px !important; }
+      .btn-solo-nuevos { padding: 5px 7px; font-size: 0.6rem; }
+      .toggle-label-text { font-size: 0.6rem; }
+      .toggle-wrap { gap: 4px; }
+    }
+    @media (max-width: 360px) {
+      .banner-title { font-size: 1.35rem; }
+      .sec-title { font-size: 1.6rem; }
     }
     @media (min-width: 769px) {
       .modal-overlay { align-items: center; }
@@ -867,17 +953,17 @@
       <button class="mode-btn"        id="btn-mayorista" onclick="clickMayorista()"><svg width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.55;vertical-align:middle;margin-right:3px;margin-bottom:1px"><rect x="1" y="4.5" width="7" height="5" rx="1.2" fill="currentColor"/><path d="M2.5 4.5V3a2 2 0 1 1 4 0v1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>Mayorista</button>
     </div>
     <div class="search-controls-right">
-      <button class="btn-solo-nuevos" id="btn-nuevos" onclick="toggleNuevos()">✦ Solo Nuevos</button>
+      <button class="btn-solo-nuevos" id="btn-nuevos" onclick="toggleNuevos()">✦ <span class="lbl-solo">Solo </span>Nuevos</button>
       <div class="toggle-wrap" onclick="toggleAgotados()">
         <span class="toggle-label-text">Agotados</span>
         <div class="toggle-switch on" id="toggle-agotados"></div>
       </div>
-      <button class="cart-btn" id="cart-btn" onclick="openCart()" aria-label="Ver pedido">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 7V6a6 6 0 1 1 12 0v1h2.2a1 1 0 0 1 1 .93l1 13.5a1 1 0 0 1-1 1.07H2.8a1 1 0 0 1-1-1.07l1-13.5a1 1 0 0 1 1-.93H6Zm2 0h8V6a4 4 0 0 0-8 0v1Z" fill="currentColor"/></svg>
-        <span class="cart-count" id="cart-count">0</span>
-      </button>
     </div>
   </div>
+  <button class="cart-btn" id="cart-btn" onclick="openCart()" aria-label="Ver pedido">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 7V6a6 6 0 1 1 12 0v1h2.2a1 1 0 0 1 1 .93l1 13.5a1 1 0 0 1-1 1.07H2.8a1 1 0 0 1-1-1.07l1-13.5a1 1 0 0 1 1-.93H6Zm2 0h8V6a4 4 0 0 0-8 0v1Z" fill="currentColor"/></svg>
+    <span class="cart-count" id="cart-count">0</span>
+  </button>
   <div class="search-inner">
     <input type="text" class="search-input" id="search-input"
            placeholder="Buscar por nombre o referencia..."
@@ -896,7 +982,7 @@
       <div class="sec-eyebrow">Lo más amado</div>
       <div class="sec-title">Best <em>Sellers</em></div>
     </div>
-    <div class="bs-heading-note">Los tonos favoritos<br>de la temporada</div>
+    <div class="bs-heading-note">Los tonos favoritos<br class="bs-note-br"><span class="bs-note-sp"> </span>de la temporada</div>
   </div>
   <div class="bs-grid" id="bs-grid"></div>
 </section>
@@ -2056,6 +2142,27 @@ document.addEventListener('click', e => {
     </div>
   </div>
 </div>
+
+<script>
+/* ── Altura real de la barra sticky ──────────────────────────
+   Mantiene sincronizados los offsets de la nav de categorías y
+   del banner de mayorista, tanto en desktop (1 fila) como en
+   móvil (2 filas). */
+(function () {
+  var bar = document.querySelector('.search-wrap');
+  if (!bar) return;
+  function syncBarHeight() {
+    var h = Math.round(bar.getBoundingClientRect().height);
+    if (h > 0) document.documentElement.style.setProperty('--bar-h', h + 'px');
+  }
+  syncBarHeight();
+  window.addEventListener('load', syncBarHeight);
+  window.addEventListener('resize', syncBarHeight);
+  window.addEventListener('orientationchange', syncBarHeight);
+  if (window.ResizeObserver) new ResizeObserver(syncBarHeight).observe(bar);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncBarHeight);
+})();
+</script>
 
 </body>
 </html>
