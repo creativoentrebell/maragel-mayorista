@@ -772,6 +772,7 @@
     "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": ""
   },
   {
@@ -1034,9 +1035,10 @@
     "subcategoria": "Amarillos y Naranjas",
     "descripcion": "",
     "imagen": "img/color/B290.webp",
-    "agotado": true,
+    "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": "",
     "galeria": [
       {
@@ -1820,6 +1822,7 @@
     "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": "",
     "galeria": [
       {
@@ -2547,9 +2550,10 @@
     "subcategoria": "Nudes",
     "descripcion": "",
     "imagen": "img/color/B015.webp",
-    "agotado": true,
+    "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": "",
     "galeria": [
       {
@@ -2708,9 +2712,10 @@
     "subcategoria": "Nudes",
     "descripcion": "",
     "imagen": "img/color/B007.webp",
-    "agotado": true,
+    "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": "",
     "galeria": [
       {
@@ -2823,9 +2828,10 @@
     "subcategoria": "Nudes Grises",
     "descripcion": "",
     "imagen": "img/color/B023.webp",
-    "agotado": true,
+    "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": "",
     "galeria": [
       {
@@ -3089,9 +3095,10 @@
     "subcategoria": "Traslúcidos",
     "descripcion": "",
     "imagen": "img/color/B099.webp",
-    "agotado": true,
+    "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": ""
   },
   {
@@ -4260,9 +4267,10 @@
     "subcategoria": "Rojos",
     "descripcion": "",
     "imagen": "img/color/B360.webp",
-    "agotado": true,
+    "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": "",
     "galeria": [
       {
@@ -4595,9 +4603,10 @@
     "subcategoria": "Cat Eye",
     "descripcion": "",
     "imagen": "img/color/B353.webp",
-    "agotado": true,
+    "agotado": false,
     "nuevo": false,
     "best_seller": false,
+    "preventa": true,
     "color_blob": "",
     "galeria": [
       {
